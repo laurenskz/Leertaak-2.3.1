@@ -18,68 +18,142 @@
  */
 package multiformat;
 
+import java.util.HashMap;
+import java.util.Stack;
+
 /**
  * The multiformat calculator
  */
 public class Calculator {
-    private Rational operand_0 = new Rational();
-    private Rational operand_1 = new Rational();
+
+    private Stack<Rational> operandStack = new Stack<>();
 
     // The current format of the calculator
     private Format format = new FixedPointFormat();
     // The current numberbase of the calculator
     private Base base = new DecimalBase();
 
+    private HashMap<String, Rational> variables = new HashMap<>();
+
     public void addOperand(String newOperand) throws FormatException {
-        operand_1 = operand_0;
-        try {
-            operand_0 = format.parse(newOperand, base);
+         try {
+            Rational newRational = format.parse(newOperand, base);
+            operandStack.push(newRational);
         } catch (NumberBaseException e) {
             onException(e);
         }
 
     }
 
+    public void pushVar(String name){
+        Rational var = getVariable(name);
+        if (var == null) return;
+        Rational zero = new Rational();
+        zero.copyOf(var);
+        operandStack.push(zero);
+    }
+
+    private Rational getVariable(String name) {
+        Rational var = variables.get(name);
+        if(var==null){
+            onException(new Exception("Variabele " + name + " is niet gevonden"));
+            return null;
+        }
+        return var;
+    }
+
+    public void popVar(String name){
+        Rational var = getVariable(name);
+        if (var == null) return;
+        var.copyOf(operandStack.pop());
+    }
+
+    public void peekVar(String name){
+        Rational var = getVariable(name);
+        if (var == null) return;
+        var.copyOf(operandStack.peek());
+    }
+
+    public String listVariables(){
+        StringBuilder builder = new StringBuilder();
+        for(String varName : variables.keySet()){
+            builder.append(varName);
+            builder.append(" : ");
+            builder.append(format.toString(variables.get(varName), base));
+            builder.append("\n");
+        }
+        return builder.toString();
+    }
+
+    public void newVariable(String name){
+        variables.put(name,new Rational());
+    }
+
     public void add() {
-        operand_0 = operand_1.plus(operand_0);
-        operand_1 = new Rational();
+        if(!hasEnoughOperands())return;
+        Rational operand_1 = operandStack.pop();
+        Rational operand_0 = operandStack.pop();
+        operandStack.push(operand_1.plus(operand_0));
     }
 
     public void subtract() {
-        operand_0 = operand_1.minus(operand_0);
-        operand_1 = new Rational();
+        if(!hasEnoughOperands())return;
+        Rational operand_1 = operandStack.pop();
+        Rational operand_0 = operandStack.pop();
+        operandStack.push(operand_1.minus(operand_0));
     }
 
     public void multiply() {
-        operand_0 = operand_1.mul(operand_0);
-        operand_1 = new Rational();
+        if(!hasEnoughOperands())return;
+        Rational operand_1 = operandStack.pop();
+        Rational operand_0 = operandStack.pop();
+        operandStack.push(operand_1.mul(operand_0));
+    }
+
+    private boolean hasEnoughOperands() {
+        if(operandStack.size()<2){
+            onException(new Exception("Er zijn niet genoeg operanden"));
+            return false;
+        }
+        return true;
+    }
+
+    public void delete(){
+        operandStack.pop();
     }
 
     public void divide() {
+        if(!hasEnoughOperands())return;
         try {
-            operand_0 = operand_1.div(operand_0);
-            operand_1 = new Rational();
+            Rational operand_1 = operandStack.pop();
+            Rational operand_0 = operandStack.pop();
+            operandStack.push(operand_1.div(operand_0));
         } catch (ArithmeticException e) {
             onException(e);
         }
 
     }
 
-    public void delete() {
-        operand_0 = operand_1;
-        operand_1 = new Rational();
-    }
-
     public void onException(Exception e) {
         System.out.println(e.getMessage());
     }
 
-    public String firstOperand() {
-        return format.toString(operand_1, base);
+    public String operands(){
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < operandStack.size(); i++) {
+            builder.append(format.toString(operandStack.get(i), base));
+            if(i!=operandStack.size()-1)builder.append(", ");
+        }
+        return builder.toString();
     }
 
-    public String secondOperand() {
-        return format.toString(operand_0, base);
+    public String getOperand(int index){
+        if(operandStack.size()<=index)return "";
+        return format.toString(operandStack.get(index), base);
+    }
+
+    public Stack<Rational> getOperandStack() {
+        return operandStack;
     }
 
     public void setBase(Base newBase) {

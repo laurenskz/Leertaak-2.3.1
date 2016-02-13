@@ -31,20 +31,16 @@ public class TestCalculator extends TestCase {
 
 		Calculator calc = new Calculator();
 
-		int x = 16;
-
 		try{
 		calc.addOperand("3.2");
-		assertEquals("0.0",calc.firstOperand());
-		assertEquals("3.2",calc.secondOperand());
+		assertEquals("3.2",calc.getOperand(0));
 
 		calc.addOperand("2.8");
-		assertEquals("3.2",calc.firstOperand());
-		assertEquals("2.8",calc.secondOperand());
+		assertEquals("3.2",calc.getOperand(0));
+		assertEquals("2.8",calc.getOperand(1));
 		
 		calc.add();
-		assertEquals("0.0",calc.firstOperand());
-		assertEquals("6.0",calc.secondOperand());
+		assertEquals("6.0",calc.getOperand(0));
 		}catch(FormatException e){
 			fail("Unexpected format exception");
 		}
