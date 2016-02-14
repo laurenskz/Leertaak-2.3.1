@@ -60,6 +60,8 @@ public class Controller implements ActionListener {
                     ((StateView) component1).setState(this.command.getCalculatorState());
                 } else if (component1 instanceof HistoryView) {
                     ((HistoryView) component1).addCommand(command);
+                } else if (component1 instanceof VariableView) {
+                    ((VariableView) component1).setVariables(this.command.getVariables());
                 }
             }
             ((JFrame) SwingUtilities.getRoot(component)).pack();

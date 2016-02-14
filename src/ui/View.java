@@ -11,6 +11,7 @@ public class View extends JFrame {
 	CalculatorView calculatorView;
 	StateView stateView;
 	HistoryView historyView;
+	VariableView variableView;
 
 	Controller controller;
 	Command command;
@@ -32,6 +33,9 @@ public class View extends JFrame {
 
 		historyView = new HistoryView();
 		container.add(historyView, BorderLayout.WEST);
+
+		variableView = new VariableView(command.getVariables());
+		container.add(variableView, BorderLayout.SOUTH);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
