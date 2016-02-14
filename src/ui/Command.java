@@ -151,28 +151,55 @@ public class Command {
     }
 
     void printHelp() {
-        System.out.println();
-        System.out.println("Insert one of the following commands:");
-        System.out.println("  op <numero>  (store an operand)");
-        System.out.println("  var <name>  (create a new variable set to 0)");
-        System.out.println("  pushvar <name>  (add the value of the variable as an operand)");
-        System.out.println("  popvar <name>  (pop the last operand into a variable)");
-        System.out.println("  peekvar <name>  (peek the last operand into a variable)");
-        System.out.println("  +            (sum the last two operands)");
-        System.out.println("  -            (substract the last operand from the previous one)");
-        System.out.println("  *            (multiply the last two operands)");
-        System.out.println("  /            (divide the last two operands)");
-        System.out.println("  dec          (switch to base 10)");
-        System.out.println("  bin          (switch to binary base)");
-        System.out.println("  hex          (switch to hexadecimal base)");
-        System.out.println("  oct          (switch to octadecimal base)");
-        System.out.println("  fixed        (switch to fixed point format)");
-        System.out.println("  float        (switch to floating point format)");
-        System.out.println("  rat          (switch to rational format)");
-        System.out.println("  del          (remove last operand)");
-        System.out.println("  help         (print this command list)");
-        System.out.println("  exit         (terminate execution)");
-        System.out.println();
+
+        String message = "Insert one of the following commands:";
+        message += "\r\n\r\n";
+        message += "  op <numero>  (store an operand)";
+        message += "\r\n";
+        message += "  var <name>  (create a new variable set to 0)";
+        message += "\r\n";
+        message += "  pushvar <name>  (add the value of the variable as an operand)";
+        message += "\r\n";
+        message += "  popvar <name>  (pop the last operand into a variable)";
+        message += "\r\n";
+        message += "  peekvar <name>  (peek the last operand into a variable)";
+        message += "\r\n";
+        message += "  +            (sum the last two operands)";
+        message += "\r\n";
+        message += "  -            (substract the last operand from the previous one)";
+        message += "\r\n";
+        message += "  *            (multiply the last two operands)";
+        message += "\r\n";
+        message += "  /            (divide the last two operands)";
+        message += "\r\n";
+        message += "  dec          (switch to base 10)";
+        message += "\r\n";
+        message += "  bin          (switch to binary base)";
+        message += "\r\n";
+        message += "  hex          (switch to hexadecimal base)";
+        message += "\r\n";
+        message += "  oct          (switch to octadecimal base)";
+        message += "\r\n";
+        message += "  fixed        (switch to fixed point format)";
+        message += "\r\n";
+        message += "  float        (switch to floating point format)";
+        message += "\r\n";
+        message += "  rat          (switch to rational format)";
+        message += "\r\n";
+        message += "  del          (remove last operand)";
+        message += "\r\n";
+        message += "  help         (print this command list)";
+        message += "\r\n";
+        message += "  exit         (terminate execution)";
+        message += "\r\n";
+
+        System.out.println(message);
+
+        JOptionPane.showMessageDialog(null, message, "Help", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public String getVariables() {
+        return calc.listVariables();
     }
 
     public static void main(String[] args) {
