@@ -18,9 +18,15 @@
  */
 package multiformat;
 
-
+/**
+ * This is a representation of the octal Base. There are 8 digits in the octal base
+ */
 public class OctalBase extends Base {
+
+    /**
+     * Construct a new Octal base
+     */
     public OctalBase() {
-        super("oct",8,"012345678");
+        super("oct",8,"01234567");//There are 8 digits in the octal base, ranging from 0-7.
     }
 }

@@ -45,7 +45,7 @@ public abstract class Base {
    * @param number A String representation like "101.101" or "1A3.E56".
    * @return The decimal double value of the number. 
    */
-  double parse(String number) throws NumberBaseException{
+  public double parse(String number) throws NumberBaseException{
     // decodes the sign
     double sign = 1.0;
     if(number.charAt(0) == '-'){
