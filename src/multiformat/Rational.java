@@ -22,7 +22,8 @@ import org.omg.SendingContext.RunTime;
 
 /**
  * Class representing a rational ('breuk').
- * @author J.Baljé: Added comments
+ * @author Jules van Dongen & Laurens op 't Zandt
+ * @version 1.1
  */
 public class Rational {
 
@@ -44,9 +45,16 @@ public class Rational {
 		simplify();
 	}
 
+	/**
+	 * Creates a new Rational initialized to zero
+	 */
 	public Rational() {
 	}
 
+	/**
+	 * Creates a new rational representing a number
+	 * @param number The number to be represented by this rational
+	 */
 	public Rational(double number) {
 		numerator = number;
 		denominator = 1.0;
@@ -116,6 +124,11 @@ public class Rational {
 								,denominator * other.denominator);
 	}
 
+	/**
+	 * Subtract two rationals.
+	 * @param other The Rational to be subtracted from this rational
+	 * @return A rational representing the subtraction of the two rationals
+	 */
 	public Rational minus(Rational other) {
 		if (denominator == other.denominator)
 			return new Rational(numerator - other.numerator, denominator);
@@ -125,12 +138,22 @@ public class Rational {
 								,denominator * other.denominator);
 	}
 
+	/**
+	 * Multiply two rationals
+	 * @param other The rational to multiply this with
+	 * @return The product of the two rationals.
+	 */
 	public Rational mul(Rational other) {
 		return new Rational(
 			numerator * other.numerator,
 			denominator * other.denominator);
 	}
 
+	/**
+	 * Divide two rationals
+	 * @param other The rational to be divided by
+	 * @return The division of the rationals
+	 */
 	public Rational div(Rational other) {
 		if(other.numerator==0d)throw new ArithmeticException(GEBRUIKER_DELEN_0_BOODSCHAP);
 		return new Rational(
@@ -138,23 +161,43 @@ public class Rational {
 			denominator * other.numerator);
 	}
 
+	/**
+	 * Sets the value of this to the value of other
+	 * @param other the Rational which values wish to be cloned.
+	 */
 	public void copyOf(Rational other) {
 		this.numerator = other.numerator;
 		this.denominator = other.denominator;
 	}
-	
-	// Added getters and setters for unittesting purposes.
+
+	/**
+	 * Get the numerator
+	 * @return the value of numerator
+	 */
 	public double getNumerator(){
 		return numerator;
 	}
-	
+
+	/**
+	 * Get the denominator
+	 * @return the value of denominator
+	 */
 	public double getDenominator() {
 		return denominator;
 	}
+
+	/**
+	 * Set the numerator
+	 * @param num the value of numerator to set
+	 */
 	public void setNumerator(double num){
 		numerator = num;
 	}
-	
+
+	/**
+	 * Set the denominator
+	 * @param den the value of denominator to set
+	 */
 	public void setDenominator(double den) {
 		denominator = den;
 	}
