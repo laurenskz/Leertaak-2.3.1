@@ -18,6 +18,7 @@
  */
 package multiformat;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.Stack;
 
@@ -35,13 +36,9 @@ public class Calculator {
 
     private HashMap<String, Rational> variables = new HashMap<>();
 
-    public void addOperand(String newOperand) throws FormatException {
-         try {
-            Rational newRational = format.parse(newOperand, base);
-            operandStack.push(newRational);
-        } catch (NumberBaseException e) {
-            onException(e);
-        }
+    public void addOperand(String newOperand) throws FormatException, NumberBaseException {
+        Rational newRational = format.parse(newOperand, base);
+        operandStack.push(newRational);
 
     }
 
@@ -136,6 +133,7 @@ public class Calculator {
 
     public void onException(Exception e) {
         System.out.println(e.getMessage());
+        JOptionPane.showMessageDialog(null, e.getMessage(), e.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
     }
 
     public String operands(){

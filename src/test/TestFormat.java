@@ -54,7 +54,9 @@ public class TestFormat extends TestCase {
 			assertEquals("3.0/4.0",calc.getOperand(0));
 		} catch (FormatException e) {
 			fail("Unexpected exception");
+		} catch (NumberBaseException e) {
+			fail("Unexpected exception");
 		}
-    	
-    }
+
+	}
 }

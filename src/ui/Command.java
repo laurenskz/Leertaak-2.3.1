@@ -20,13 +20,14 @@ package ui;
 
 import multiformat.*;
 
+import javax.swing.*;
 import java.io.*;
 
 /**
  * De main-klasse die leest en schrijft naar de console.
  *
  * @author Brugali
- * @author Baljé
+ * @author Baljï¿½
  */
 public class Command {
     Calculator calc = new Calculator();
@@ -65,22 +66,21 @@ public class Command {
             else if (command.equals("del")) calc.delete();
             else if (command.indexOf("pushvar") >= 0) {
                 calc.pushVar(command.substring(7).trim());
-            }else if (command.indexOf("peekvar") >= 0) {
+            } else if (command.indexOf("peekvar") >= 0) {
                 calc.peekVar(command.substring(7).trim());
-            }else if (command.indexOf("popvar") >= 0) {
+            } else if (command.indexOf("popvar") >= 0) {
                 calc.popVar(command.substring(6).trim());
-            }
-            else if (command.indexOf("var") >= 0) {
+            } else if (command.indexOf("var") >= 0) {
                 calc.newVariable(command.substring(3).trim());
-            }
-            else if (command.indexOf("op") >= 0) {
+            } else if (command.indexOf("op") >= 0) {
                 try {
                     calc.addOperand(command.substring(2).trim());
                 } catch (FormatException e) {
                     System.out.println("Wrong operand: " + e.getMessage());
+                } catch (NumberBaseException e) {
+                    System.out.println(e.getMessage());
                 }
-            }
-            else if (command.indexOf("read") >= 0) {
+            } else if (command.indexOf("read") >= 0) {
                 try {
                     BufferedReader file = new BufferedReader(
                             new FileReader(command.substring(4).trim()));
@@ -101,6 +101,53 @@ public class Command {
             ioe.printStackTrace();
         }
         return true;
+    }
+
+    public String getCalculatorState() {
+        return "[" + calc.getBase().getName() + ","
+                + calc.getFormat().getName() + ","
+                + calc.operands()
+                + "] >";
+    }
+
+    public void parseCommand(String command) throws FileNotFoundException, FormatException, InvalidCommandException, NumberBaseException {
+        if (command.equals("+")) calc.add();
+        else if (command.equals("-")) calc.subtract();
+        else if (command.equals("*")) calc.multiply();
+        else if (command.equals("/")) calc.divide();
+        else if (command.equals("dec")) calc.setBase(new DecimalBase());
+        else if (command.equals("bin")) calc.setBase(new BinaryBase());
+        else if (command.equals("oct")) calc.setBase(new OctalBase());
+        else if (command.equals("hex")) calc.setBase(new HexBase());
+        else if (command.equals("vars")) System.out.println(calc.listVariables());
+        else if (command.equals("rat")) calc.setFormat(new RationalFormat());
+        else if (command.equals("fixed")) calc.setFormat(new FixedPointFormat());
+        else if (command.equals("float")) calc.setFormat(new FloatingPointFormat());
+        else if (command.equals("del")) calc.delete();
+        else if (command.indexOf("pushvar") >= 0) {
+            calc.pushVar(command.substring(7).trim());
+        } else if (command.indexOf("peekvar") >= 0) {
+            calc.peekVar(command.substring(7).trim());
+        } else if (command.indexOf("popvar") >= 0) {
+            calc.popVar(command.substring(6).trim());
+        } else if (command.indexOf("var") >= 0) {
+            calc.newVariable(command.substring(3).trim());
+        } else if (command.indexOf("op") >= 0) {
+            calc.addOperand(command.substring(2).trim());
+        } else if (command.indexOf("read") >= 0) {
+            BufferedReader file = new BufferedReader(
+                    new FileReader(command.substring(4).trim()));
+            prevReader = lineReader;
+            lineReader = file;
+            System.out.println("Reading from file " + command.substring(4).trim());
+        } else if (command.equals("help")) {
+            printHelp();
+        } else if (command.equals("exit")) {
+            System.exit(1);
+        } else {
+            System.out.println("Error! Not a valid command");
+            throw new InvalidCommandException();
+        }
     }
 
     void printHelp() {
@@ -129,9 +176,21 @@ public class Command {
     }
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        }
+
+        View view = new View();
         Command command = new Command();
         while (command.nextCommand()) ;
         System.out.println("Thanks for using our calculator!");
     }
-
 }
